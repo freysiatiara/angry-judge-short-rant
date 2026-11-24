@@ -46,6 +46,15 @@ def main():
     with open(path, "w", encoding="utf-8") as handle:
         handle.write(text)
     os.chmod(path, 0o644)
+    with open(path, "rb") as handle:
+        written = handle.read()
+    if written != text.encode("utf-8"):
+        print(
+            "error: read-back verification failed: %d bytes on disk "
+            "differ from the %d bytes written" % (len(written), len(text)),
+            file=sys.stderr,
+        )
+        return 1
     return 0
 
 
